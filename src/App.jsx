@@ -1,12 +1,25 @@
 import React from 'react';
 import Header from './components/Header';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { DweetApiProvider } from './context/DweetContext';
 
 export default function App() {
+  const navigate = useNavigate();
+
+  const onAllDweets = () => {
+    navigate('/');
+  };
+
+  const onMyDweets = () => {
+    navigate(`/danny`);
+  };
+
   return (
     <>
-      <Header />
-      <Outlet />
+      <Header onAllDweets={onAllDweets} onMyDweets={onMyDweets} />
+      <DweetApiProvider>
+        <Outlet />
+      </DweetApiProvider>
     </>
   );
 }
