@@ -3,7 +3,7 @@ import DweetService from '../service/dweet';
 
 export const DweetApiContext = createContext();
 
-const dweetApi = new DweetService();
+const dweetApi = new DweetService(process.env.REACT_APP_BASE_URL);
 
 export function DweetApiProvider({ children }) {
   return (

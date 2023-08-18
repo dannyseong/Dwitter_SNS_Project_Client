@@ -1,51 +1,61 @@
 export default class DweetService {
-  dweets = [
-    {
-      id: 1,
-      text: '드림코딩에서 강의 들으면 너무 좋으다',
-      createdAt: '2021-05-09T04:20:57.000Z',
-      name: 'Bob',
-      username: 'bob',
-      url: 'https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png',
-    },
-    {
-      id: 2,
-      text: '드림코딩에서 강의 들으면 너무 좋으다',
-      createdAt: '2021-05-09T04:20:57.000Z',
-      name: 'John',
-      username: 'john',
-      url: 'https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png',
-    },
-  ];
+  constructor(baseURL) {
+    this.baseURL = baseURL;
+  }
 
   async getDweets(username) {
-    return username
-      ? this.dweets.filter((d) => d.username === username)
-      : this.dweets;
+    const query = username ? `?username=${username}` : '';
+    const response = await fetch(`${this.baseURL}/dweets${query}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const data = await response.json();
+    if (response.status !== 200) {
+      throw new Error(data.message);
+    }
+    return data;
   }
 
   async postDweet(text) {
-    const dweet = {
-      id: Date.now(),
-      createdAt: new Date(),
-      name: 'danny',
-      username: 'danny',
-      text,
-    };
-    this.dweets.push(dweet);
-    return dweet;
+    const response = await fetch(`${this.baseURL}/dweets`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text,
+        username: 'danny',
+        name: 'danny',
+        url: 'https://avatars.githubusercontent.com/u/99000722?v=4',
+      }),
+    });
+    const data = await response.json();
+    if (response.status !== 201) {
+      throw new Error(data.message);
+    }
+    return data;
   }
 
   async deleteDweet(dweetId) {
-    this.dweets = this.dweets.filter((d) => d.id !== dweetId);
+    const response = await fetch(`${this.baseURL}/dweets/${dweetId}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (response.status !== 204) {
+      throw new Error('An unexpected error has occurred');
+    }
   }
 
   async updateDweet(dweetId, text) {
-    const dweet = this.dweets.find((d) => d.id === dweetId);
-    if (!dweet) {
-      throw new Error('tweet not found!');
+    const response = await fetch(`${this.baseURL}/dweets/${dweetId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text,
+      }),
+    });
+    const data = await response.json();
+    if (response.status !== 200) {
+      throw new Error(data.message);
     }
-    dweet.text = text;
-    return dweet;
+    return data;
   }
 }
