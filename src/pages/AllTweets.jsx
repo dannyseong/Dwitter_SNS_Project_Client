@@ -1,14 +1,10 @@
 import React from 'react';
-import { Outlet } from 'react-router';
+import Dweets from '../components/Dweets';
 
-export default function AllTweets() {
+export default function AllTweets({ dweetService }) {
   return (
     <>
-      {/* all the other elements */}
-      Main Page
-      <div>
-        <Outlet />
-      </div>
+      <Dweets dweetService={dweetService} addable={true} />
     </>
   );
 }

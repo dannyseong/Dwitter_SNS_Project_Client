@@ -4,15 +4,19 @@ import './index.css';
 import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
 import ErrorPage from './pages/errorPage';
-import AllTweets from './pages/AllTweets';
 import MyTweets from './pages/MyTweets';
+import App from './App';
+import AllTweets from './pages/AllTweets';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <AllTweets />,
+    element: <App />,
     errorElement: <ErrorPage />,
-    children: [{ path: '/:username', element: <MyTweets /> }],
+    children: [
+      { path: '/', element: <AllTweets /> },
+      { path: '/:username', element: <MyTweets /> },
+    ],
   },
 ]);
 
