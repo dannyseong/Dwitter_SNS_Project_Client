@@ -5,13 +5,13 @@ export default function Header() {
     <header className='header'>
       <div className='logo'>
         <img src='./img/logo.png' alt='Dwitter Logo' className='logo-img' />
-        <h1>Dwitter</h1>
-        {/* {username && <span>@{username}</span>} */}
+        <h1 className='logo-name'>Dwitter</h1>
+        <span className='logo-user'>@username</span>
       </div>
-      <nav>
+      <nav className='menu'>
         <button>All Tweets</button>
         <button>My Tweets</button>
-        <button>Logout</button>
+        <button className='menu-item'>Logout</button>
       </nav>
     </header>
   );
