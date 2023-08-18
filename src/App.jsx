@@ -15,11 +15,11 @@ export default function App() {
   };
 
   return (
-    <>
+    <div className='app'>
       <Header onAllDweets={onAllDweets} onMyDweets={onMyDweets} />
       <DweetApiProvider>
         <Outlet />
       </DweetApiProvider>
-    </>
+    </div>
   );
 }

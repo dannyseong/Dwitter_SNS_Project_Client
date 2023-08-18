@@ -3,7 +3,6 @@ import { Link, useParams } from 'react-router-dom';
 
 export default function Header({ onAllDweets, onMyDweets }) {
   const user = useParams();
-  console.log(user);
   return (
     <header className='header'>
       <div className='logo'>

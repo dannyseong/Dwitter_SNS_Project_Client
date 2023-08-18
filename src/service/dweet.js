@@ -8,6 +8,14 @@ export default class DweetService {
       username: 'bob',
       url: 'https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png',
     },
+    {
+      id: 2,
+      text: '드림코딩에서 강의 들으면 너무 좋으다',
+      createdAt: '2021-05-09T04:20:57.000Z',
+      name: 'John',
+      username: 'john',
+      url: 'https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png',
+    },
   ];
 
   async getDweets(username) {
@@ -20,19 +28,19 @@ export default class DweetService {
     const dweet = {
       id: Date.now(),
       createdAt: new Date(),
-      name: 'Ellie',
-      username: 'ellie',
+      name: 'danny',
+      username: 'danny',
       text,
     };
     this.dweets.push(dweet);
     return dweet;
   }
 
-  async deleteTweet(dweetId) {
+  async deleteDweet(dweetId) {
     this.dweets = this.dweets.filter((d) => d.id !== dweetId);
   }
 
-  async updateTweet(dweetId, text) {
+  async updateDweet(dweetId, text) {
     const dweet = this.dweets.find((d) => d.id === dweetId);
     if (!dweet) {
       throw new Error('tweet not found!');

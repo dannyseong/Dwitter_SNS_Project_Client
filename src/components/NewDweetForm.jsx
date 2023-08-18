@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
 import { useDweetApi } from '../context/DweetContext';
 
-export default function NewDweetForm() {
+export default function NewDweetForm({ onError, onCreated }) {
   const { dweetApi } = useDweetApi();
   const [text, setText] = useState('');
   const onSubmit = (e) => {
     e.preventDefault();
-    dweetApi.postDweet();
-    //add post function
-    setText('');
+    dweetApi
+      .postDweet(text)
+      .then((created) => {
+        setText('');
+        onCreated(created);
+      })
+      .catch(onError);
   };
 
   const onChage = (e) => {
     setText(e.target.value);
   };
   return (
-    <form onSubmit={onSubmit}>
+    <form className='tweet-form' onSubmit={onSubmit}>
       <input
         type='text'
         placeholder='Edit your dweet'
@@ -23,8 +27,11 @@ export default function NewDweetForm() {
         required
         autoFocus
         onChange={onChage}
+        className='form-input tweet-input'
       />
-      <button>Post</button>
+      <button type='submit' className='form-btn'>
+        Post
+      </button>
     </form>
   );
 }
