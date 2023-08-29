@@ -7,6 +7,11 @@ import ErrorPage from './pages/errorPage';
 import MyTweets from './pages/MyTweets';
 import App from './App';
 import AllTweets from './pages/AllTweets';
+import { AuthApiProvider, AuthErrorEventBus } from './context/AuthContext';
+import AuthService from './service/auth';
+import DweetService from './service/dweet';
+import { HttpClient } from './network/http';
+import { DweetApiProvider } from './context/DweetContext';
 
 const router = createBrowserRouter([
   {
@@ -20,11 +25,22 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+const http = new HttpClient(process.env.REACT_APP_BASE_URL);
+const dweetService = new DweetService(http);
+const authService = new AuthService(http);
+const authErrorEventBus = new AuthErrorEventBus();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthApiProvider
+      authService={authService}
+      authErrorEventBus={authErrorEventBus}
+    >
+      <DweetApiProvider dweetService={dweetService}>
+        <RouterProvider router={router} />
+      </DweetApiProvider>
+    </AuthApiProvider>
   </React.StrictMode>
 );
 

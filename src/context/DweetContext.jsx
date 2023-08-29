@@ -1,13 +1,9 @@
 import { createContext, useContext } from 'react';
-import DweetService from '../service/dweet';
-import { HttpClient } from '../network/http';
 
 export const DweetApiContext = createContext();
 
-const http = new HttpClient(process.env.REACT_APP_BASE_URL);
-const dweetApi = new DweetService(http);
-
-export function DweetApiProvider({ children }) {
+export function DweetApiProvider({ dweetService, children }) {
+  const dweetApi = dweetService;
   return (
     <DweetApiContext.Provider value={{ dweetApi }}>
       {children}

@@ -1,8 +1,6 @@
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
 
-export default function Header({ onAllDweets, onMyDweets }) {
-  const user = useParams();
+export default function Header({ user, onLogout, onAllDweets, onMyDweets }) {
   return (
     <header className='header'>
       <div className='logo'>
@@ -10,15 +8,15 @@ export default function Header({ onAllDweets, onMyDweets }) {
         <h1 className='logo-name'>Dwitter</h1>
         {user && <span className='logo-user'>@{user.username}</span>}
       </div>
-      <nav className='menu'>
-        <button onClick={() => onAllDweets()}>All Tweets</button>
-
-        <button onClick={() => onMyDweets()}>My Tweets</button>
-
-        <Link>
-          <button className='menu-item'>Logout</button>
-        </Link>
-      </nav>
+      {user && (
+        <nav className='menu'>
+          <button onClick={() => onAllDweets()}>All Tweets</button>
+          <button onClick={() => onMyDweets()}>My Tweets</button>
+          <button className='menu-item' onClick={onLogout}>
+            Logout
+          </button>
+        </nav>
+      )}
     </header>
   );
 }
