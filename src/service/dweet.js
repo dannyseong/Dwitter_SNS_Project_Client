@@ -1,18 +1,21 @@
 export default class DweetService {
-  constructor(http) {
+  constructor(http, tokenStorage) {
     this.http = http;
+    this.tokenStorage = tokenStorage;
   }
 
   async getDweets(username) {
     const query = username ? `?username=${username}` : '';
     return this.http.fetch(`/dweets${query}`, {
       method: 'GET',
+      headers: this.getHeaders(),
     });
   }
 
   async postDweet(text) {
     return this.http.fetch(`/dweets`, {
       method: 'POST',
+      headers: this.getHeaders(),
       body: JSON.stringify({
         text,
         username: 'danny',
@@ -25,15 +28,24 @@ export default class DweetService {
   async deleteDweet(dweetId) {
     return this.http.fetch(`/dweets/${dweetId}`, {
       method: 'DELETE',
+      headers: this.getHeaders(),
     });
   }
 
   async updateDweet(dweetId, text) {
     return this.http.fetch(`/dweets/${dweetId}`, {
       method: 'PUT',
+      headers: this.getHeaders(),
       body: JSON.stringify({
         text,
       }),
     });
+  }
+
+  getHeaders() {
+    const token = this.tokenStorage.getToken();
+    return {
+      Authorization: `Bearer ${token}`,
+    };
   }
 }

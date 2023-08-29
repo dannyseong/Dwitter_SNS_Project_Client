@@ -1,37 +1,47 @@
 export default class AuthService {
-  constructor(http) {
+  constructor(http, tokenStorage) {
     this.http = http;
-  }
-  async login(username, password) {
-    console.log('login success!');
-    return {
-      username: 'sdh742',
-      token:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE2OTMyNjk3MjksImV4cCI6MTY5MzQ0MjUyOX0.2w25zV9z6AzMoo9au6LKh5_zGqwJLtaWsCYs77-X_QA',
-    };
-  }
-
-  async me() {
-    return {
-      username: 'sdh742',
-      token:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE2OTMyNjk3MjksImV4cCI6MTY5MzQ0MjUyOX0.2w25zV9z6AzMoo9au6LKh5_zGqwJLtaWsCYs77-X_QA',
-    };
-  }
-
-  async logout() {
-    console.log('logout success!');
-    return;
+    this.tokenStorage = tokenStorage;
   }
 
   async signup(username, password, name, email, url) {
-    console.log(
-      `username: ${username}, password: ${password}, name: ${name}, email: ${email}, url: ${url}`
-    );
-    return {
-      username: 'sdh742',
-      token:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE2OTMyNjk3MjksImV4cCI6MTY5MzQ0MjUyOX0.2w25zV9z6AzMoo9au6LKh5_zGqwJLtaWsCYs77-X_QA',
-    };
+    const data = await this.http.fetch('/auth/signup', {
+      method: 'POST',
+      body: JSON.stringify({
+        username,
+        password,
+        name,
+        email,
+        url,
+      }),
+    });
+    this.tokenStorage.saveToken(data.token);
+    return data;
+  }
+
+  async login(username, password) {
+    const data = await this.http.fetch('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+    this.tokenStorage.saveToken(data.token);
+
+    return data;
+  }
+
+  async me() {
+    const token = this.tokenStorage.getToken();
+    return this.http.fetch('/auth/me', {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
+  async logout() {
+    this.tokenStorage.clearToken();
+    return;
   }
 }

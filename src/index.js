@@ -12,6 +12,7 @@ import AuthService from './service/auth';
 import DweetService from './service/dweet';
 import { HttpClient } from './network/http';
 import { DweetApiProvider } from './context/DweetContext';
+import { TokenStorage } from './db/token';
 
 const router = createBrowserRouter([
   {
@@ -25,9 +26,12 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-const http = new HttpClient(process.env.REACT_APP_BASE_URL);
-const dweetService = new DweetService(http);
-const authService = new AuthService(http);
+
+const baseURL = process.env.REACT_APP_BASE_URL;
+const tokenStorage = new TokenStorage();
+const httpClient = new HttpClient(baseURL);
+const dweetService = new DweetService(httpClient, tokenStorage);
+const authService = new AuthService(httpClient, tokenStorage);
 const authErrorEventBus = new AuthErrorEventBus();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

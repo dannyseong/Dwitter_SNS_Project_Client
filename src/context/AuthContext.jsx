@@ -6,17 +6,18 @@ import {
   useEffect,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
 export const AuthApiContext = createContext();
 
-const contextRef = createRef();
+// const contextRef = useRef();
 
 export function AuthApiProvider({ authService, authErrorEventBus, children }) {
   const [user, setUser] = useState(undefined);
 
-  useImperativeHandle(contextRef, () => (user ? user.token : undefined));
+  // useImperativeHandle(contextRef, () => (user ? user.token : undefined));
 
   useEffect(() => {
     authErrorEventBus.listen((err) => {
@@ -26,7 +27,13 @@ export function AuthApiProvider({ authService, authErrorEventBus, children }) {
   }, [authErrorEventBus]);
 
   useEffect(() => {
-    authService.me().then(setUser).catch(console.error);
+    authService
+      .me()
+      .then((user) => {
+        setUser(user);
+        // console.log(user);
+      })
+      .catch(console.error);
   }, [authService]);
 
   const signUp = useCallback(
