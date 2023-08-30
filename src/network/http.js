@@ -15,7 +15,7 @@ class HttpClient {
     try {
       data = await res.json();
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
     }
     if (res.status > 299 || res.status < 200) {
       const message = data && data.message ? data.message : 'Something Wrong';
